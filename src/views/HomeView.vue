@@ -1,33 +1,59 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+
+const router = useRouter();
+const store = useStore();
+
+const searchValue = ref('');
+const result = ref('');
+const loading = ref(false);
+
+
+// Step 3: Define the function to handle the API call
+const submitSearch = async () => {
+  loading.value = true;
+  try {
+    const apiUrl = `http://37.32.7.91:3040/api/v1/vulnerabilities/${searchValue.value}`;
+    const response = await axios.get(apiUrl);
+
+    result.value = response.data;
+    store.dispatch('updateSharedData', { key: response.data });
+    router.push({ name: 'DetailsPage' });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    result.value = 'Failed to fetch data';
+  } finally {
+    loading.value = false; // Set loading to false after the API call finishes
+  }
+};
+
 </script>
 
 <template>
-  <header class="navbar">
-    <div class="logo">
-      <img src="../assets/logo.svg" alt="">
-      <p class="logo-paragraph">VulnHunter</p>
-    </div>
-    <ul class="nav-links">
-      <li><a class="nav-link" href="default.asp">Home</a></li>
-      <li><a class="nav-link" href="news.asp">News</a></li>
-      <li><a class="nav-link" href="contact.asp">Contact</a></li>
-      <li><a class="nav-link" href="about.asp">About</a></li>
-    </ul>
-    <div class="auth">
-      <a class="auth-signup">Signup</a>
-      <a class="auth-login"> Login</a>
-    </div>
-  </header>
   <main>
     <div class="main-left">
-      <p class="headline"><span class="headline-span">Stress-free</span> way to <span class="headline-span">secure</span> you software</p>
-      <p class="sub-headline">"Identify and address security vulnerabilities in your software with our powerful analysis tool. Quickly scan
+      <p class="headline"><span class="headline-span">Stress-free</span> way to <span class="headline-span">secure</span>
+        you software</p>
+      <p class="sub-headline">"Identify and address security vulnerabilities in your software with our powerful analysis
+        tool. Quickly scan
         your code to uncover potential threats, providing you with the insights needed to strengthen your system's
         defenses. Keep your software secure and stay ahead of cyber risks."</p>
-      <input class="search">
+      <div class="input-container">
+        <input v-model="searchValue" placeholder="Enter name of a package, library, etc ..." class="search">
+        <a @click.prevent="submitSearch" class="search-button" href="#">Go</a>
+        <div v-if="loading" class="spinner-overlay">
+          <!-- <div class="spinner" ></div> -->
+          <!-- <a-spin class="sipinner" size="large" /> -->
+          <span class="loader"></span>
+        </div>
+        <p v-else>Search result: {{ result }}</p>
+      </div>
     </div>
     <div class="main-right">
+      <img class="vectors" src="../assets/Group.svg" alt="">
       <img class="landing-vector" src="../assets/landing-vector.svg" alt="">
     </div>
   </main>
@@ -118,6 +144,7 @@ main {
 
 .main-right {
   display: flex;
+  flex-direction: column;
   padding: 20% 70px;
 }
 
@@ -125,26 +152,160 @@ main {
   width: 100%;
 }
 
+.vectors {
+  width: 30%;
+}
+
 .headline {
   color: white;
   margin-bottom: 15px;
-  font-size: xx-large;
+  font-size: 3em;
   font-weight: bolder;
+  line-height: 1.3;
 }
 
 .sub-headline {
   color: white;
   margin-bottom: 15px;
+  font-size: large;
+  margin-top: 20px;
 }
 
-.headline-span{
+.headline-span {
   color: #CAFF33;
+  font-weight: bold;
 }
 
 .search {
   height: 40px;
   width: 80%;
   border-radius: 8px;
+  padding: 10px;
+  color: black;
 }
 
+.input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.search-button {
+  background-color: #CAFF33;
+  padding: 8px 40px;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+.search:hover {
+  border: 1px solid black;
+}
+
+::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+input:focus {
+  border-width: 0px;
+  box-shadow: none;
+}
+
+/* Spinner Overlay */
+.spinner-overlay {
+  position: fixed;
+  /* Fixed position to cover the entire screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  /* Dark semi-transparent background */
+  display: flex;
+  /* Flexbox to center the spinner */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  /* High z-index to ensure it's on top */
+}
+
+/* Simple spinner styles */
+.spinner {
+  border: 4px solid #f3f3f3;
+  /* Light grey */
+  border-top: 4px solid #3498db;
+  /* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+
+}
+
+.spinner {
+  color: #CAFF33;
+  background-color: #CAFF33 !important;
+  /* Replace with your desired color */
+}
+
+.loader {
+  position: relative;
+  display: flex;
+}
+
+.loader:before,
+.loader:after {
+  content: '';
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  position: relative;
+  margin: 0 5px;
+  border-radius: 50%;
+  color: #FFF;
+  background: currentColor;
+  box-shadow: 50px 0, -50px 0;
+  animation: left 1s infinite ease-in-out;
+}
+
+.loader:after {
+  color: #CAFF33;
+  animation: right 1.1s infinite ease-in-out;
+}
+
+
+@keyframes right {
+
+  0%,
+  100% {
+    transform: translateY(-10px)
+  }
+
+  50% {
+    transform: translateY(10px)
+  }
+}
+
+@keyframes left {
+
+  0%,
+  100% {
+    transform: translateY(10px)
+  }
+
+  50% {
+    transform: translateY(-10px)
+  }
+}
 </style>
