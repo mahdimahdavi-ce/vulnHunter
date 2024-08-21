@@ -24,7 +24,8 @@
                         <div class="fixed-version"><span class="title">Fixed Versions: </span>{{ item.patched_versions }}
                         </div>
                         <div v-if="item.severity !== undefined" class="header-div"><span class="title">Severity: </span> {{
-                            item.severity }}</div>
+                            item.severity }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,7 +42,7 @@ const route = useRoute();
 const id = route.params.id;
 
 const vulnerabilities = ref(null);
-const loading = ref(false);
+const loading = ref(true);
 
 
 const fetchVulnerability = async (id) => {

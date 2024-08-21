@@ -9,12 +9,14 @@ const store = useStore();
 
 const searchValue = ref('');
 const result = ref('');
+const err = ref(false);
 const loading = ref(false);
 
 
 // Step 3: Define the function to handle the API call
 const submitSearch = async () => {
   loading.value = true;
+  err.value = false;
   try {
     const apiUrl = `http://37.32.7.91:3040/api/v1/vulnerabilities/${searchValue.value}`;
     const response = await axios.get(apiUrl);
@@ -25,6 +27,7 @@ const submitSearch = async () => {
   } catch (error) {
     console.error('Error fetching data:', error);
     result.value = 'Failed to fetch data';
+    err.value = true;
   } finally {
     loading.value = false; // Set loading to false after the API call finishes
   }
@@ -45,12 +48,10 @@ const submitSearch = async () => {
         <input v-model="searchValue" placeholder="Enter name of a package, library, etc ..." class="search">
         <a @click.prevent="submitSearch" class="search-button" href="#">Go</a>
         <div v-if="loading" class="spinner-overlay">
-          <!-- <div class="spinner" ></div> -->
-          <!-- <a-spin class="sipinner" size="large" /> -->
           <span class="loader"></span>
         </div>
-        <p v-else>Search result: {{ result }}</p>
       </div>
+      <p v-if="err" class="error">Oops! failed to get vulnerabilities from server</p>
     </div>
     <div class="main-right">
       <img class="vectors" src="../assets/Group.svg" alt="">
@@ -307,5 +308,11 @@ input:focus {
   50% {
     transform: translateY(-10px)
   }
+}
+
+.error {
+  margin-top: 20px;
+  color: #c0392b;
+  font-size: large;
 }
 </style>
