@@ -41,8 +41,7 @@ const submitSearch = async () => {
       <p class="headline"><span class="headline-span">Stress-free</span> way to <span class="headline-span">secure</span>
         you software</p>
       <p class="sub-headline">"Identify and address security vulnerabilities in your software with our powerful analysis
-        tool. Quickly scan
-        your code to uncover potential threats, providing you with the insights needed to strengthen your system's
+        tool. providing you with the insights needed to strengthen your system's
         defenses. Keep your software secure and stay ahead of cyber risks."</p>
       <div class="input-container">
         <input v-model="searchValue" placeholder="Enter name of a package, library, etc ..." class="search">
