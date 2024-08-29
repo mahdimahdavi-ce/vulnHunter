@@ -314,4 +314,47 @@ input:focus {
   color: #c0392b;
   font-size: large;
 }
+
+@media (max-width:1025px) {
+  main {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main-left {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20%;
+    width: 80%;
+    margin-bottom:50px;
+  }
+
+  .main-right {
+    display: none;
+    margin-bottom:50px;
+  }
+
+  .search {
+    height: 40px;
+    width: 90%;
+    border-radius: 8px;
+    padding: 10px;
+    color: black;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 30px;
+  }
+
+  .search-button {
+    background-color: #CAFF33;
+    padding: 8px 30px;
+    border-radius: 8px;
+    margin-left: 10px;
+  }
+
+}
 </style>
