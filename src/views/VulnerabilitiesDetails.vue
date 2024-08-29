@@ -226,4 +226,64 @@ onMounted(async () => {
         transform: translateY(-10px)
     }
 }
+
+@media (max-width:800px) {
+    .table {
+        display: grid;
+        width: 80%;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 10% 10% 10% 10% 40% 20%;
+        margin-top: 50px;
+        border: 1px solid white;
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+
+    .table-header {
+        grid-column: 1 / 3;
+        grid-row: 1 / 4;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .summary {
+        grid-column: 1 / 3;
+        grid-row: 4;
+        margin-top: 20px;
+    }
+
+    .description {
+        grid-column: 1 / 3;
+        grid-row: 5;
+        margin-top: 20px;
+        
+    }
+
+    .version-container {
+        grid-column: 1 / 3;
+        grid-row: 6;
+        display: flex;
+        margin-top: 20px;
+        flex-direction: column;
+        flex-wrap: wrap;
+        height: auto;
+        
+    }
+    .vulnerable-container{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+    
+    .header-div {
+        margin-bottom: 10px;
+    }
+
+    .version {
+        margin-bottom: 10px;
+    }
+}
 </style>
